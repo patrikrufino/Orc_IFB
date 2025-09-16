@@ -1,0 +1,22 @@
+# Arquivos e diretórios a serem ignorados no deploy
+# O GitHub Actions automaticamente ignora .git, .github, etc.
+
+# Arquivos de desenvolvimento (se houver)
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Dependências de desenvolvimento (caso adicione Node.js no futuro)
+node_modules/
+.npm/
+.cache/
+
+# Arquivos temporários
+*.swp
+*.swo
+*~

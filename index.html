@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proposta Estratégica | BeLiabe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0d1b2a;
+        position: relative; /* Essencial para o z-index do pseudo-elemento */
+        overflow-x: hidden; /* Previne scroll horizontal durante parallax */
+      }
+      body::before {
+        content: "";
+        position: fixed; /* Chave para o efeito Parallax */
+        top: -20%; /* Permite movimento para cima */
+        left: -10%; /* Permite movimento lateral */
+        right: -10%;
+        bottom: -20%; /* Permite movimento para baixo */
+        z-index: -1; /* Coloca o fundo atrás de todo o conteúdo */
+        will-change: transform; /* Otimiza performance do parallax */
+
+        /* Imagem de fundo com overlay escuro */
+        background-image: linear-gradient(
+            rgba(13, 27, 42, 0.95),
+            rgba(13, 27, 42, 0.98)
+          ),
+          url("https://images.unsplash.com/photo-1531315639992-8d7a874053e1?q=80&w=1974&auto=format&fit=crop");
+        background-size: 120% 120%; /* Tamanho maior para permitir movimento */
+        background-position: center center;
+        transition: transform 0.1s ease-out;
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #e0e1dd, #778da9);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .card-hover-effect {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+      .card-hover-effect:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+          0 10px 10px -5px rgba(0, 0, 0, 0.2);
+      }
+      .header-bg {
+        /* O fundo do body vai aparecer através daqui, criando um efeito coeso */
+        border-bottom: 1px solid rgba(119, 141, 169, 0.2);
+      }
+      .card-bg {
+        background-color: #1b263b;
+      }
+      .flag-btn {
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+      }
+      .flag-btn:hover,
+      .flag-btn.active {
+        opacity: 1;
+      }
+
+      /* Efeitos Parallax */
+      .parallax-element {
+        will-change: transform;
+        transition: transform 0.1s ease-out;
+      }
+
+      .parallax-header {
+        transform: translateY(0);
+      }
+
+      .parallax-card {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .parallax-section {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Animações de entrada */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s ease-out;
+        transition-delay: var(--animation-delay, 0s);
+      }
+
+      .animate-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Delays personalizados para os cards */
+      .animate-on-scroll[style*="animation-delay: 0.1s"] {
+        transition-delay: 0.1s;
+      }
+      .animate-on-scroll[style*="animation-delay: 0.2s"] {
+        transition-delay: 0.2s;
+      }
+      .animate-on-scroll[style*="animation-delay: 0.3s"] {
+        transition-delay: 0.3s;
+      }
+      .animate-on-scroll[style*="animation-delay: 0.4s"] {
+        transition-delay: 0.4s;
+      }
+      .animate-on-scroll[style*="animation-delay: 0.5s"] {
+        transition-delay: 0.5s;
+      }
+      .animate-on-scroll[style*="animation-delay: 0.6s"] {
+        transition-delay: 0.6s;
+      }
+
+      /* Otimizações para mobile */
+      @media (max-width: 768px) {
+        .parallax-element {
+          transform: none !important; /* Desabilitar parallax em mobile para performance */
+        }
+
+        body::before {
+          transform: none !important;
+          background-attachment: scroll; /* Melhor performance em mobile */
+        }
+
+        .animate-on-scroll {
+          transition-duration: 0.6s; /* Animações mais rápidas em mobile */
+        }
+      }
+
+      /* Melhoria de performance */
+      .parallax-element {
+        backface-visibility: hidden;
+        perspective: 1000px;
+      }
+
+      /* Reduzir motion para usuários que preferem menos movimento */
+      @media (prefers-reduced-motion: reduce) {
+        .parallax-element {
+          transform: none !important;
+        }
+
+        body::before {
+          transform: none !important;
+        }
+
+        .animate-on-scroll {
+          transition: opacity 0.3s ease-out;
+          transform: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="text-white antialiased">
+    <!-- Cabeçalho com Logo e Idiomas -->
+    <header class="header-bg py-8 parallax-element parallax-header">
+      <div class="container mx-auto px-4">
+        <!-- Seletor de Idioma -->
+        <div class="flex justify-end items-center space-x-3 mb-4">
+          <img
+            src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/br.svg"
+            alt="Português"
+            class="w-8 h-auto flag-btn active"
+            id="lang-pt"
+          />
+          <img
+            src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/us.svg"
+            alt="English"
+            class="w-8 h-auto flag-btn"
+            id="lang-en"
+          />
+        </div>
+        <div class="text-center flex flex-col items-center">
+          <img
+            src="./public/assets/logo.png"
+            alt="Logo BeLiabe"
+            class="h-24 w-24 mb-4 parallax-element"
+          />
+          <h1
+            class="text-5xl md:text-7xl font-black uppercase tracking-wider text-white parallax-element"
+            data-lang-key="company_name"
+          >
+            BeLiabe
+          </h1>
+          <p
+            class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mt-2 parallax-element"
+            data-lang-key="header_subtitle"
+          >
+            Soluções Digitais Estratégicas para [Nome da Instituição de Futebol]
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+      <!-- Seção de Conexão -->
+      <section
+        class="mb-20 md:mb-28 text-center parallax-element parallax-section animate-on-scroll"
+      >
+        <h2
+          class="text-3xl md:text-4xl font-black mb-4 gradient-text"
+          data-lang-key="mission_title"
+        >
+          Entendemos a Sua Missão
+        </h2>
+        <p
+          class="text-lg text-gray-400 max-w-3xl mx-auto mb-10"
+          data-lang-key="mission_subtitle"
+        >
+          Sabemos que uma instituição de futebol é muito mais que um time. É uma
+          força para a comunidade, um motor de sonhos e uma plataforma de
+          transformação social. Nossa proposta é criar um ecossistema digital
+          que amplifique esse impacto.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            class="bg-gray-800/50 p-6 rounded-lg text-center animate-on-scroll"
+            style="animation-delay: 0.1s"
+          >
+            <i
+              data-lucide="users"
+              class="w-12 h-12 text-[#778DA9] mx-auto mb-4"
+            ></i>
+            <h3 class="font-bold text-xl mb-2" data-lang-key="connect_title">
+              Conectar a Comunidade
+            </h3>
+            <p class="text-gray-400" data-lang-key="connect_desc">
+              Unir torcedores, atletas, pais e voluntários em um só lugar.
+            </p>
+          </div>
+          <div
+            class="bg-gray-800/50 p-6 rounded-lg text-center animate-on-scroll"
+            style="animation-delay: 0.2s"
+          >
+            <i
+              data-lucide="hand-heart"
+              class="w-12 h-12 text-[#778DA9] mx-auto mb-4"
+            ></i>
+            <h3 class="font-bold text-xl mb-2" data-lang-key="attract_title">
+              Atrair Parceiros
+            </h3>
+            <p class="text-gray-400" data-lang-key="attract_desc">
+              Facilitar a chegada de doadores, patrocinadores e voluntários.
+            </p>
+          </div>
+          <div
+            class="bg-gray-800/50 p-6 rounded-lg text-center animate-on-scroll"
+            style="animation-delay: 0.3s"
+          >
+            <i
+              data-lucide="trophy"
+              class="w-12 h-12 text-[#778DA9] mx-auto mb-4"
+            ></i>
+            <h3 class="font-bold text-xl mb-2" data-lang-key="strengthen_title">
+              Fortalecer a Marca
+            </h3>
+            <p class="text-gray-400" data-lang-key="strengthen_desc">
+              Construir uma presença online profissional que gera credibilidade.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de Planos -->
+      <h2
+        class="text-3xl md:text-4xl font-black mb-10 text-center animate-on-scroll"
+        data-lang-key="solutions_title"
+      >
+        Nossas Soluções para o
+        <span class="gradient-text" data-lang-key="solutions_highlight"
+          >Seu Crescimento</span
+        >
+      </h2>
+      <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Card 1: PLATAFORMA COMPLETA -->
+        <div
+          class="card-hover-effect card-bg rounded-xl p-6 md:p-8 border border-green-500/30 flex flex-col shadow-lg parallax-element parallax-card animate-on-scroll"
+        >
+          <div class="flex-grow">
+            <div class="flex items-center mb-4">
+              <i data-lucide="rocket" class="w-10 h-10 text-green-400 mr-3"></i>
+              <h2
+                class="text-2xl font-bold text-green-400"
+                data-lang-key="plan1_title"
+              >
+                PLATAFORMA COMPLETA
+              </h2>
+            </div>
+            <p
+              class="text-sm text-gray-400 mb-6 italic"
+              data-lang-key="plan1_subtitle"
+            >
+              A solução definitiva para uma presença digital dominante desde o
+              primeiro dia.
+            </p>
+            <ul
+              class="space-y-3 text-gray-300 mb-6"
+              data-lang-key="plan1_features_list"
+            >
+              <li>
+                <span class="text-green-400 mr-2">✓</span>Site Institucional e
+                E-commerce
+              </li>
+              <li>
+                <span class="text-green-400 mr-2">✓</span>Páginas de Captura
+                (Doadores, Voluntários)
+              </li>
+              <li>
+                <span class="text-green-400 mr-2">✓</span>Blog com Newsletter e
+                SEO Completo
+              </li>
+              <li>
+                <span class="text-green-400 mr-2">✓</span>Galeria, Jogos,
+                Patrocinadores e mais
+              </li>
+              <li class="font-semibold">
+                <span class="text-green-400 mr-2">✓</span>Tecnologia: WordPress
+                (Gestão Fácil)
+              </li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-center bg-gray-900/50 rounded-lg p-4 mb-6">
+              <p class="text-gray-400 text-sm" data-lang-key="investment_label">
+                Investimento no Projeto
+              </p>
+              <p class="text-3xl font-bold text-white">R$ 12.000,00</p>
+              <p
+                class="text-xs text-gray-500"
+                data-lang-key="payment_condition_1"
+              >
+                30% de entrada + restante na entrega
+              </p>
+            </div>
+            <div class="text-center bg-[#415A77]/50 rounded-lg p-4 mb-6">
+              <p
+                class="text-gray-300 text-sm"
+                data-lang-key="maintenance_label_1"
+              >
+                Manutenção e Suporte Premium
+              </p>
+              <p class="text-xl font-semibold text-white">
+                R$ 1.500,00
+                <span
+                  class="text-base font-normal text-gray-400"
+                  data-lang-key="per_month"
+                  >/mês</span
+                >
+              </p>
+              <p
+                class="text-xs text-gray-400"
+                data-lang-key="maintenance_desc_1"
+              >
+                Inclui 10h/mês para conteúdo
+              </p>
+            </div>
+            <a
+              href="https://wa.me/5516999646189?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Plano%20Completo."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button
+                class="w-full bg-green-500 hover:bg-green-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                data-lang-key="select_plan1_btn"
+              >
+                Selecionar Plano Completo
+              </button>
+            </a>
+            <p
+              class="text-center text-sm mt-4 text-gray-400"
+              data-lang-key="delivery_1"
+            >
+              Entrega em até <strong>60 dias</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: PROJETO EVOLUTIVO -->
+        <div
+          class="card-hover-effect card-bg rounded-xl p-6 md:p-8 border border-blue-500/30 flex flex-col shadow-lg parallax-element parallax-card animate-on-scroll"
+        >
+          <div class="flex-grow">
+            <div class="flex items-center mb-4">
+              <i
+                data-lucide="bar-chart-3"
+                class="w-10 h-10 text-blue-400 mr-3"
+              ></i>
+              <h2
+                class="text-2xl font-bold text-blue-400"
+                data-lang-key="plan2_title"
+              >
+                PROJETO EVOLUTIVO
+              </h2>
+            </div>
+            <p
+              class="text-sm text-gray-400 mb-6 italic"
+              data-lang-key="plan2_subtitle"
+            >
+              Comece rápido e cresça com inteligência, otimizando o
+              investimento.
+            </p>
+            <ul
+              class="space-y-3 text-gray-300 mb-6"
+              data-lang-key="plan2_features_list"
+            >
+              <li>
+                <span class="text-blue-400 mr-2">✓</span>Fase 1: Site
+                Institucional no ar
+              </li>
+              <li>
+                <span class="text-blue-400 mr-2">✓</span>Evolução contínua e
+                quinzenal
+              </li>
+              <li>
+                <span class="text-blue-400 mr-2">✓</span>Prioridades definidas
+                em conjunto
+              </li>
+              <li>
+                <span class="text-blue-400 mr-2">✓</span>Reuniões estratégicas
+                de 1h/quinzena
+              </li>
+              <li class="font-semibold">
+                <span class="text-blue-400 mr-2">✓</span>Tecnologia: Vercel +
+                Supabase (Moderna)
+              </li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-center bg-gray-900/50 rounded-lg p-4 mb-6">
+              <p
+                class="text-gray-400 text-sm"
+                data-lang-key="initial_investment_label"
+              >
+                Investimento Inicial
+              </p>
+              <p class="text-3xl font-bold text-white">R$ 3.000,00</p>
+              <p
+                class="text-xs text-gray-500"
+                data-lang-key="payment_condition_2"
+              >
+                30% de entrada + restante na entrega da Fase 1
+              </p>
+            </div>
+            <div class="text-center bg-[#415A77]/50 rounded-lg p-4 mb-6">
+              <p
+                class="text-gray-300 text-sm"
+                data-lang-key="maintenance_label_2"
+              >
+                Manutenção e Evolução
+              </p>
+              <p class="text-xl font-semibold text-white">
+                R$ 600,00
+                <span
+                  class="text-base font-normal text-gray-400"
+                  data-lang-key="per_month"
+                  >/mês</span
+                >
+              </p>
+              <p
+                class="text-xs text-gray-400"
+                data-lang-key="maintenance_desc_2"
+              >
+                Garante 20h/mês para desenvolvimento
+              </p>
+            </div>
+            <a
+              href="https://wa.me/5516999646189?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Projeto%20Evolutivo."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                data-lang-key="select_plan2_btn"
+              >
+                Selecionar Plano Evolutivo
+              </button>
+            </a>
+            <p
+              class="text-center text-sm mt-4 text-gray-400"
+              data-lang-key="delivery_2"
+            >
+              Fase 1 no ar em até <strong>14 dias</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: PARCERIA ESTRATÉGICA -->
+        <div
+          class="card-hover-effect card-bg rounded-xl p-6 md:p-8 border border-purple-500/30 flex flex-col shadow-lg parallax-element parallax-card animate-on-scroll"
+        >
+          <div class="flex-grow">
+            <div class="flex items-center mb-4">
+              <i
+                data-lucide="swords"
+                class="w-10 h-10 text-purple-400 mr-3"
+              ></i>
+              <h2
+                class="text-2xl font-bold text-purple-400"
+                data-lang-key="plan3_title"
+              >
+                PARCERIA ESTRATÉGICA
+              </h2>
+            </div>
+            <p
+              class="text-sm text-gray-400 mb-6 italic"
+              data-lang-key="plan3_subtitle"
+            >
+              Uma união de forças para criar um legado de impacto social e
+              digital.
+            </p>
+            <div class="bg-gray-900/30 p-4 rounded-lg mb-4">
+              <h3
+                class="font-semibold text-purple-300"
+                data-lang-key="plan3_modelA_title"
+              >
+                Modelo A: Impacto Social
+              </h3>
+              <p
+                class="text-sm text-gray-300 mt-1"
+                data-lang-key="plan3_modelA_desc"
+              >
+                Baseado na Opção 2, com manutenção de
+                <span class="font-bold">R$0</span>, substituída por uma parceria
+                para criar um projeto de
+                <span class="font-bold">educação em tecnologia</span> na
+                comunidade.
+              </p>
+            </div>
+            <div class="bg-gray-900/30 p-4 rounded-lg">
+              <h3
+                class="font-semibold text-purple-300"
+                data-lang-key="plan3_modelB_title"
+              >
+                Modelo B: Autonomia Digital
+              </h3>
+              <p
+                class="text-sm text-gray-300 mt-1"
+                data-lang-key="plan3_modelB_desc"
+              >
+                Baseado na Opção 1, com manutenção de
+                <span class="font-bold">R$500/mês</span> para cobrir apenas o
+                essencial (segurança e suporte), dando autonomia total na gestão
+                do conteúdo.
+              </p>
+            </div>
+          </div>
+          <div>
+            <div class="text-center bg-gray-900/50 rounded-lg p-4 mt-6 mb-6">
+              <p
+                class="text-gray-400 text-sm"
+                data-lang-key="flexible_investment_label"
+              >
+                Investimento Inicial Flexível
+              </p>
+              <p class="text-3xl font-bold text-white" data-lang-key="from">
+                A partir de R$ 3.000,00
+              </p>
+              <p
+                class="text-xs text-gray-500"
+                data-lang-key="payment_condition_3"
+              >
+                Dependendo do modelo escolhido
+              </p>
+            </div>
+            <a
+              href="https://wa.me/5516999646189?text=Olá!%20Gostaria%20de%20discutir%20a%20Parceria%20Estratégica."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button
+                class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                data-lang-key="discuss_partnership_btn"
+              >
+                Discutir Parceria
+              </button>
+            </a>
+            <p
+              class="text-center text-sm mt-4 text-gray-400"
+              data-lang-key="build_together"
+            >
+              Vamos construir juntos
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <!-- Seção de Ideias Futuras -->
+      <section
+        class="mt-20 md:mt-28 text-center parallax-element parallax-section animate-on-scroll"
+      >
+        <h2
+          class="text-3xl md:text-4xl font-black mb-4 gradient-text"
+          data-lang-key="future_title"
+        >
+          Visão de Futuro: Onde Podemos Chegar Juntos
+        </h2>
+        <p
+          class="text-lg text-gray-400 max-w-3xl mx-auto mb-10"
+          data-lang-key="future_subtitle"
+        >
+          Nossa parceria não termina na entrega do site. Vemos esta plataforma
+          como um organismo vivo, pronto para crescer e incorporar inovações que
+          fortaleçam ainda mais a sua missão.
+        </p>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left"
+        >
+          <div
+            class="card-bg p-6 rounded-lg border border-gray-700/50 parallax-element animate-on-scroll"
+            style="animation-delay: 0.1s"
+          >
+            <h3
+              class="font-bold text-xl text-teal-400 mb-2"
+              data-lang-key="feature1_title"
+            >
+              Portal da Transparência
+            </h3>
+            <p class="text-gray-300" data-lang-key="feature1_desc">
+              Uma área dedicada para mostrar aos doadores e patrocinadores como
+              cada real investido está sendo utilizado, com gráficos e
+              relatórios simples. Isso gera confiança, incentiva novas doações e
+              fortalece a imagem da instituição.
+            </p>
+          </div>
+          <div
+            class="card-bg p-6 rounded-lg border border-gray-700/50 parallax-element animate-on-scroll"
+            style="animation-delay: 0.2s"
+          >
+            <h3
+              class="font-bold text-xl text-amber-400 mb-2"
+              data-lang-key="feature2_title"
+            >
+              Portal do Atleta e Comunidade
+            </h3>
+            <p class="text-gray-300" data-lang-key="feature2_desc">
+              Um espaço exclusivo com login para atletas, pais e voluntários.
+              Permite acesso a calendários de treinos, comunicados, avaliações
+              de desempenho, fóruns de discussão e compartilhamento de fotos,
+              fortalecendo os laços da comunidade.
+            </p>
+          </div>
+          <div
+            class="card-bg p-6 rounded-lg border border-gray-700/50 parallax-element animate-on-scroll"
+            style="animation-delay: 0.3s"
+          >
+            <h3
+              class="font-bold text-xl text-rose-400 mb-2"
+              data-lang-key="feature3_title"
+            >
+              Gamificação para Torcedores
+            </h3>
+            <p class="text-gray-300" data-lang-key="feature3_desc">
+              Um sistema de pontos para os torcedores que mais interagem:
+              check-in em jogos, compras na loja, compartilhamento de notícias.
+              Os pontos podem ser trocados por descontos, produtos exclusivos ou
+              experiências, aumentando o engajamento.
+            </p>
+          </div>
+          <div
+            class="card-bg p-6 rounded-lg border border-gray-700/50 parallax-element animate-on-scroll"
+            style="animation-delay: 0.4s"
+          >
+            <h3
+              class="font-bold text-xl text-indigo-400 mb-2"
+              data-lang-key="feature4_title"
+            >
+              Scouting e Análise de Desempenho
+            </h3>
+            <p class="text-gray-300" data-lang-key="feature4_desc">
+              Uma área restrita para a comissão técnica, onde é possível
+              registrar estatísticas de atletas, acompanhar a evolução em
+              treinamentos e jogos, e gerenciar uma base de dados de jovens
+              talentos observados em peneiras.
+            </p>
+          </div>
+          <div
+            class="card-bg p-6 rounded-lg border border-gray-700/50 parallax-element animate-on-scroll"
+            style="animation-delay: 0.5s"
+          >
+            <h3
+              class="font-bold text-xl text-lime-400 mb-2"
+              data-lang-key="feature5_title"
+            >
+              Inscrições Online para Eventos
+            </h3>
+            <p class="text-gray-300" data-lang-key="feature5_desc">
+              Um sistema integrado para gerenciar inscrições em peneiras,
+              clínicas de futebol, workshops e outros eventos. Automatiza a
+              coleta de dados, o pagamento (se houver) e a comunicação com os
+              participantes.
+            </p>
+          </div>
+          <div
+            class="card-bg p-6 rounded-lg border border-gray-700/50 parallax-element animate-on-scroll"
+            style="animation-delay: 0.6s"
+          >
+            <h3
+              class="font-bold text-xl text-cyan-400 mb-2"
+              data-lang-key="feature6_title"
+            >
+              Mural de Parcerias Comunitárias
+            </h3>
+            <p class="text-gray-300" data-lang-key="feature6_desc">
+              Uma página dedicada a destacar parcerias com escolas locais,
+              empresas e projetos sociais. Funciona como um hub para divulgar
+              ações conjuntas e atrair novos parceiros que queiram se associar à
+              marca da instituição.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Prova Social -->
+      <section
+        class="mt-20 md:mt-28 text-center parallax-element parallax-section animate-on-scroll"
+      >
+        <div
+          class="max-w-3xl mx-auto card-bg/50 rounded-lg p-8 border border-gray-700/50"
+        >
+          <p
+            class="text-2xl text-gray-300 italic"
+            data-lang-key="testimonial_text"
+          >
+            "Uma parceria que vai além da tecnologia, entendendo de verdade as
+            nossas necessidades dentro e fora de campo."
+          </p>
+          <p
+            class="mt-4 font-bold text-[#778DA9]"
+            data-lang-key="testimonial_author"
+          >
+            - [Nome de um Parceiro ou Diretor do Clube]
+          </p>
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <section
+        class="mt-20 md:mt-28 text-center card-bg rounded-2xl p-10 parallax-element parallax-section animate-on-scroll"
+      >
+        <h2
+          class="text-3xl md:text-4xl font-black mb-4"
+          data-lang-key="cta_title"
+        >
+          Pronto para Marcar um
+          <span class="gradient-text">Golaço no Mundo Digital?</span>
+        </h2>
+        <p
+          class="text-lg text-gray-400 max-w-3xl mx-auto mb-8"
+          data-lang-key="cta_subtitle"
+        >
+          Vamos conversar sobre como podemos aplicar essas ideias e construir um
+          projeto que traga resultados reais para a sua instituição. Agende uma
+          chamada de 15 minutos, sem compromisso.
+        </p>
+        <a
+          href="https://wa.me/5516999646189?text=Olá!%20Vi%20a%20proposta%20e%20gostaria%20de%20agendar%20uma%20conversa."
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button
+            class="bg-[#415A77] hover:bg-[#5e7d9f] text-white font-bold py-4 px-10 rounded-lg transition-colors duration-300 text-lg"
+            data-lang-key="cta_button"
+          >
+            Agendar uma Conversa
+          </button>
+        </a>
+      </section>
+
+      <!-- Rodapé -->
+      <footer class="text-center mt-16 border-t border-gray-700/50 pt-8">
+        <img
+          src="https://storage.googleapis.com/gemini-prod-us-west1-150127411138/92a8b982-f5e2-45e0-9092-d6676cc13361"
+          alt="Logo BeLiabe"
+          class="h-16 w-16 mb-2 mx-auto"
+        />
+        <p class="text-gray-400 font-bold text-xl" data-lang-key="company_name">
+          BeLiabe
+        </p>
+        <p class="text-gray-500" data-lang-key="footer_role">
+          Consultor de Estratégia Digital
+        </p>
+        <p class="text-gray-500" data-lang-key="footer_contact">
+          [Seu Telefone] | [Seu E-mail]
+        </p>
+        <p class="text-xs text-gray-600 mt-4" data-lang-key="footer_legal">
+          Esta proposta é válida por 30 dias. Valores de manutenção podem ter
+          reajuste anual.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      const translations = {
+        pt: {
+          company_name: "BeLiabe",
+          header_subtitle:
+            "Soluções Digitais Estratégicas para [Nome da Instituição de Futebol]",
+          mission_title: "Entendemos a Sua Missão",
+          mission_subtitle:
+            "Sabemos que uma instituição de futebol é muito mais que um time. É uma força para a comunidade, um motor de sonhos e uma plataforma de transformação social. Nossa proposta é criar um ecossistema digital que amplifique esse impacto.",
+          connect_title: "Conectar a Comunidade",
+          connect_desc:
+            "Unir torcedores, atletas, pais e voluntários em um só lugar.",
+          attract_title: "Atrair Parceiros",
+          attract_desc:
+            "Facilitar a chegada de doadores, patrocinadores e voluntários.",
+          strengthen_title: "Fortalecer a Marca",
+          strengthen_desc:
+            "Construir uma presença online profissional que gera credibilidade.",
+          solutions_title: "Nossas Soluções para o",
+          solutions_highlight: "Seu Crescimento",
+          plan1_title: "PLATAFORMA COMPLETA",
+          plan1_subtitle:
+            "A solução definitiva para uma presença digital dominante desde o primeiro dia.",
+          plan1_features_list: `<li><span class="text-green-400 mr-2">✓</span>Site Institucional e E-commerce</li><li><span class="text-green-400 mr-2">✓</span>Páginas de Captura (Doadores, Voluntários)</li><li><span class="text-green-400 mr-2">✓</span>Blog com Newsletter e SEO Completo</li><li><span class="text-green-400 mr-2">✓</span>Galeria, Jogos, Patrocinadores e mais</li><li class="font-semibold"><span class="text-green-400 mr-2">✓</span>Tecnologia: WordPress (Gestão Fácil)</li>`,
+          investment_label: "Investimento no Projeto",
+          payment_condition_1: "30% de entrada + restante na entrega",
+          maintenance_label_1: "Manutenção e Suporte Premium",
+          per_month: "/mês",
+          maintenance_desc_1: "Inclui 10h/mês para conteúdo",
+          select_plan1_btn: "Selecionar Plano Completo",
+          delivery_1: `Entrega em até <strong>60 dias</strong>`,
+          plan2_title: "PROJETO EVOLUTIVO",
+          plan2_subtitle:
+            "Comece rápido e cresça com inteligência, otimizando o investimento.",
+          plan2_features_list: `<li><span class="text-blue-400 mr-2">✓</span>Fase 1: Site Institucional no ar</li><li><span class="text-blue-400 mr-2">✓</span>Evolução contínua e quinzenal</li><li><span class="text-blue-400 mr-2">✓</span>Prioridades definidas em conjunto</li><li><span class="text-blue-400 mr-2">✓</span>Reuniões estratégicas de 1h/quinzena</li><li class="font-semibold"><span class="text-blue-400 mr-2">✓</span>Tecnologia: Vercel + Supabase (Moderna)</li>`,
+          initial_investment_label: "Investimento Inicial",
+          payment_condition_2: "30% de entrada + restante na entrega da Fase 1",
+          maintenance_label_2: "Manutenção e Evolução",
+          maintenance_desc_2: "Garante 20h/mês para desenvolvimento",
+          select_plan2_btn: "Selecionar Plano Evolutivo",
+          delivery_2: `Fase 1 no ar em até <strong>14 dias</strong>`,
+          plan3_title: "PARCERIA ESTRATÉGICA",
+          plan3_subtitle:
+            "Uma união de forças para criar um legado de impacto social e digital.",
+          plan3_modelA_title: "Modelo A: Impacto Social",
+          plan3_modelA_desc: `Baseado na Opção 2, com manutenção de <span class="font-bold">R$0</span>, substituída por uma parceria para criar um projeto de <span class="font-bold">educação em tecnologia</span> na comunidade.`,
+          plan3_modelB_title: "Modelo B: Autonomia Digital",
+          plan3_modelB_desc: `Baseado na Opção 1, com manutenção de <span class="font-bold">R$500/mês</span> para cobrir apenas o essencial (segurança e suporte), dando autonomia total na gestão do conteúdo.`,
+          flexible_investment_label: "Investimento Inicial Flexível",
+          from: "A partir de R$ 3.000,00",
+          payment_condition_3: "Dependendo do modelo escolhido",
+          discuss_partnership_btn: "Discutir Parceria",
+          build_together: "Vamos construir juntos",
+          future_title: "Visão de Futuro: Onde Podemos Chegar Juntos",
+          future_subtitle:
+            "Nossa parceria não termina na entrega do site. Vemos esta plataforma como um organismo vivo, pronto para crescer e incorporar inovações que fortaleçam ainda mais a sua missão.",
+          feature1_title: "Portal da Transparência",
+          feature1_desc:
+            "Uma área dedicada para mostrar aos doadores e patrocinadores como cada real investido está sendo utilizado, com gráficos e relatórios simples. Isso gera confiança, incentiva novas doações e fortalece a imagem da instituição.",
+          feature2_title: "Portal do Atleta e Comunidade",
+          feature2_desc:
+            "Um espaço exclusivo com login para atletas, pais e voluntários. Permite acesso a calendários de treinos, comunicados, avaliações de desempenho, fóruns de discussão e compartilhamento de fotos, fortalecendo os laços da comunidade.",
+          feature3_title: "Gamificação para Torcedores",
+          feature3_desc:
+            "Um sistema de pontos para os torcedores que mais interagem: check-in em jogos, compras na loja, compartilhamento de notícias. Os pontos podem ser trocados por descontos, produtos exclusivos ou experiências, aumentando o engajamento.",
+          feature4_title: "Scouting e Análise de Desempenho",
+          feature4_desc:
+            "Uma área restrita para a comissão técnica, onde é possível registrar estatísticas de atletas, acompanhar a evolução em treinamentos e jogos, e gerenciar uma base de dados de jovens talentos observados em peneiras.",
+          feature5_title: "Inscrições Online para Eventos",
+          feature5_desc:
+            "Um sistema integrado para gerenciar inscrições em peneiras, clínicas de futebol, workshops e outros eventos. Automatiza a coleta de dados, o pagamento (se houver) e a comunicação com os participantes.",
+          feature6_title: "Mural de Parcerias Comunitárias",
+          feature6_desc:
+            "Uma página dedicada a destacar parcerias com escolas locais, empresas e projetos sociais. Funciona como um hub para divulgar ações conjuntas e atrair novos parceiros que queiram se associar à marca da instituição.",
+          testimonial_text: `"Uma parceria que vai além da tecnologia, entendendo de verdade as nossas necessidades dentro e fora de campo."`,
+          testimonial_author: "- [Nome de um Parceiro ou Diretor do Clube]",
+          cta_title: `Pronto para Marcar um <span class="gradient-text">Golaço no Mundo Digital?</span>`,
+          cta_subtitle:
+            "Vamos conversar sobre como podemos aplicar essas ideias e construir um projeto que traga resultados reais para a sua instituição. Agende uma chamada de 15 minutos, sem compromisso.",
+          cta_button: "Agendar uma Conversa",
+          footer_role: "Consultor de Estratégia Digital",
+          footer_contact: "[Seu Telefone] | [Seu E-mail]",
+          footer_legal:
+            "Esta proposta é válida por 30 dias. Valores de manutenção podem ter reajuste anual.",
+        },
+        en: {
+          company_name: "BeLiabe",
+          header_subtitle:
+            "Strategic Digital Solutions for [Football Institution Name]",
+          mission_title: "We Understand Your Mission",
+          mission_subtitle:
+            "We know that a football institution is much more than a team. It's a force for the community, an engine of dreams, and a platform for social transformation. Our proposal is to create a digital ecosystem that amplifies this impact.",
+          connect_title: "Connect the Community",
+          connect_desc:
+            "Unite fans, athletes, parents, and volunteers in one place.",
+          attract_title: "Attract Partners",
+          attract_desc:
+            "Facilitate the arrival of donors, sponsors, and volunteers.",
+          strengthen_title: "Strengthen the Brand",
+          strengthen_desc:
+            "Build a professional online presence that generates credibility.",
+          solutions_title: "Our Solutions for Your",
+          solutions_highlight: "Growth",
+          plan1_title: "COMPLETE PLATFORM",
+          plan1_subtitle:
+            "The definitive solution for a dominant digital presence from day one.",
+          plan1_features_list: `<li><span class="text-green-400 mr-2">✓</span>Institutional Website & E-commerce</li><li><span class="text-green-400 mr-2">✓</span>Landing Pages (Donors, Volunteers)</li><li><span class="text-green-400 mr-2">✓</span>Blog with Newsletter & Full SEO</li><li><span class="text-green-400 mr-2">✓</span>Gallery, Matches, Sponsors & more</li><li class="font-semibold"><span class="text-green-400 mr-2">✓</span>Technology: WordPress (Easy Management)</li>`,
+          investment_label: "Project Investment",
+          payment_condition_1: "30% down payment + remainder on delivery",
+          maintenance_label_1: "Premium Maintenance & Support",
+          per_month: "/month",
+          maintenance_desc_1: "Includes 10h/month for content",
+          select_plan1_btn: "Select Complete Plan",
+          delivery_1: `Delivered in up to <strong>60 days</strong>`,
+          plan2_title: "EVOLVING PROJECT",
+          plan2_subtitle:
+            "Start fast and grow smart, optimizing your investment.",
+          plan2_features_list: `<li><span class="text-blue-400 mr-2">✓</span>Phase 1: Institutional Site Live</li><li><span class="text-blue-400 mr-2">✓</span>Continuous bi-weekly evolution</li><li><span class="text-blue-400 mr-2">✓</span>Priorities defined together</li><li><span class="text-blue-400 mr-2">✓</span>1h/bi-weekly strategic meetings</li><li class="font-semibold"><span class="text-blue-400 mr-2">✓</span>Technology: Vercel + Supabase (Modern)</li>`,
+          initial_investment_label: "Initial Investment",
+          payment_condition_2:
+            "30% down payment + remainder on Phase 1 delivery",
+          maintenance_label_2: "Maintenance & Evolution",
+          maintenance_desc_2: "Guarantees 20h/month for development",
+          select_plan2_btn: "Select Evolving Plan",
+          delivery_2: `Phase 1 live in up to <strong>14 days</strong>`,
+          plan3_title: "STRATEGIC PARTNERSHIP",
+          plan3_subtitle:
+            "Joining forces to create a legacy of social and digital impact.",
+          plan3_modelA_title: "Model A: Social Impact",
+          plan3_modelA_desc: `Based on Option 2, with <span class="font-bold">$0</span> maintenance, replaced by a partnership to create a <span class="font-bold">tech education project</span> in the community.`,
+          plan3_modelB_title: "Model B: Digital Autonomy",
+          plan3_modelB_desc: `Based on Option 1, with <span class="font-bold">$100/month</span> maintenance to cover only the essentials (security and support), giving full autonomy in content management.`,
+          flexible_investment_label: "Flexible Initial Investment",
+          from: "Starting from $600.00",
+          payment_condition_3: "Depending on the chosen model",
+          discuss_partnership_btn: "Discuss Partnership",
+          build_together: "Let's build together",
+          future_title: "Future Vision: Where We Can Go Together",
+          future_subtitle:
+            "Our partnership doesn't end with the website delivery. We see this platform as a living organism, ready to grow and incorporate innovations that further strengthen your mission.",
+          feature1_title: "Transparency Portal",
+          feature1_desc:
+            "A dedicated area to show donors and sponsors how every dollar is being used, with simple charts and reports. This builds trust, encourages new donations, and strengthens the institution's image.",
+          feature2_title: "Athlete & Community Portal",
+          feature2_desc:
+            "An exclusive login area for athletes, parents, and volunteers. It provides access to training calendars, announcements, performance reviews, discussion forums, and photo sharing, strengthening community bonds.",
+          feature3_title: "Gamification for Fans",
+          feature3_desc:
+            "A points system for the most engaged fans: check-ins at games, store purchases, sharing news. Points can be exchanged for discounts, exclusive products, or experiences, increasing engagement.",
+          feature4_title: "Scouting & Performance Analysis",
+          feature4_desc:
+            "A restricted area for the coaching staff to record athlete statistics, track progress in training and games, and manage a database of young talents spotted in tryouts.",
+          feature5_title: "Online Event Registration",
+          feature5_desc:
+            "An integrated system to manage registrations for tryouts, football clinics, workshops, and other events. It automates data collection, payment (if any), and communication with participants.",
+          feature6_title: "Community Partnerships Wall",
+          feature6_desc:
+            "A page dedicated to highlighting partnerships with local schools, businesses, and social projects. It acts as a hub to publicize joint actions and attract new partners who want to associate with the institution's brand.",
+          testimonial_text: `"A partnership that goes beyond technology, truly understanding our needs both on and off the field."`,
+          testimonial_author: "- [Partner's Name or Club Director]",
+          cta_title: `Ready to Score a <span class="gradient-text">Goal in the Digital World?</span>`,
+          cta_subtitle:
+            "Let's talk about how we can apply these ideas and build a project that brings real results to your institution. Schedule a 15-minute, no-commitment call.",
+          cta_button: "Schedule a Call",
+          footer_role: "Digital Strategy Consultant",
+          footer_contact: "[Your Phone] | [Your Email]",
+          footer_legal:
+            "This proposal is valid for 30 days. Maintenance values may have an annual adjustment.",
+        },
+      };
+
+      const setLanguage = (lang) => {
+        document.documentElement.lang = lang === "en" ? "en-US" : "pt-BR";
+        document.querySelectorAll("[data-lang-key]").forEach((el) => {
+          const key = el.dataset.langKey;
+          if (translations[lang] && translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+          }
+        });
+        // Update active flag
+        document
+          .getElementById("lang-pt")
+          .classList.toggle("active", lang === "pt");
+        document
+          .getElementById("lang-en")
+          .classList.toggle("active", lang === "en");
+      };
+
+      document
+        .getElementById("lang-pt")
+        .addEventListener("click", () => setLanguage("pt"));
+      document
+        .getElementById("lang-en")
+        .addEventListener("click", () => setLanguage("en"));
+
+      // Set initial language
+      setLanguage("pt");
+
+      // Efeitos Parallax
+      class ParallaxController {
+        constructor() {
+          this.lastScrollY = 0;
+          this.ticking = false;
+          this.isMobile = window.innerWidth <= 768;
+          this.parallaxElements =
+            document.querySelectorAll(".parallax-element");
+          this.animateElements =
+            document.querySelectorAll(".animate-on-scroll");
+
+          this.init();
+        }
+
+        init() {
+          // Detectar dispositivo móvel e ajustar comportamento
+          this.detectMobile();
+
+          // Inicializar IntersectionObserver para animações de entrada
+          this.setupIntersectionObserver();
+
+          // Listener de scroll para parallax (desabilitar em móveis para performance)
+          if (!this.isMobile) {
+            window.addEventListener(
+              "scroll",
+              () => this.requestParallaxUpdate(),
+              { passive: true }
+            );
+          }
+
+          // Listener para redimensionamento
+          window.addEventListener("resize", () => this.handleResize(), {
+            passive: true,
+          });
+
+          // Aplicar efeito inicial
+          this.updateParallax();
+
+          // Verificar elementos visíveis no carregamento
+          this.checkVisibleElements();
+        }
+
+        detectMobile() {
+          this.isMobile =
+            window.innerWidth <= 768 ||
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+              navigator.userAgent
+            );
+
+          // Adicionar classe ao body para ajustes CSS se necessário
+          if (this.isMobile) {
+            document.body.classList.add("mobile-device");
+          } else {
+            document.body.classList.remove("mobile-device");
+          }
+        }
+
+        handleResize() {
+          const wasMobile = this.isMobile;
+          this.detectMobile();
+
+          // Se mudou de desktop para mobile ou vice-versa, reinicializar
+          if (wasMobile !== this.isMobile) {
+            if (this.isMobile) {
+              // Reset transforms em mobile
+              this.parallaxElements.forEach((element) => {
+                element.style.transform = "";
+              });
+            } else {
+              // Reativar parallax em desktop
+              window.addEventListener(
+                "scroll",
+                () => this.requestParallaxUpdate(),
+                { passive: true }
+              );
+            }
+          }
+        }
+
+        setupIntersectionObserver() {
+          const options = {
+            root: null,
+            rootMargin: "-5% 0px -5% 0px",
+            threshold: [0.1, 0.3, 0.7],
+          };
+
+          this.observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                // Adicionar delay baseado no atributo style
+                const element = entry.target;
+                const style = element.getAttribute("style");
+                const delayMatch =
+                  style && style.match(/animation-delay:\s*([0-9.]+)s/);
+                const delay = delayMatch ? parseFloat(delayMatch[1]) * 1000 : 0;
+
+                setTimeout(() => {
+                  element.classList.add("visible");
+                }, delay);
+              }
+            });
+          }, options);
+
+          this.animateElements.forEach((element) => {
+            this.observer.observe(element);
+          });
+        }
+
+        requestParallaxUpdate() {
+          if (this.isMobile) return; // Skip em mobile
+
+          this.lastScrollY = window.scrollY;
+
+          if (!this.ticking) {
+            requestAnimationFrame(() => this.updateParallax());
+            this.ticking = true;
+          }
+        }
+
+        updateParallax() {
+          if (this.isMobile) {
+            this.ticking = false;
+            return;
+          }
+
+          const scrollY = this.lastScrollY;
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.scrollHeight;
+
+          // Parallax do fundo - movimento mais sutil
+          const backgroundSpeed = Math.min(scrollY * 0.3, documentHeight * 0.1);
+          document.body.style.setProperty(
+            "--bg-transform",
+            `translateY(${backgroundSpeed}px)`
+          );
+
+          // Aplicar parallax nos elementos
+          this.parallaxElements.forEach((element, index) => {
+            const rect = element.getBoundingClientRect();
+            const elementTop = rect.top;
+            const elementHeight = rect.height;
+            const elementBottom = elementTop + elementHeight;
+
+            // Verificar se o elemento está próximo da viewport para melhor performance
+            if (elementBottom >= -200 && elementTop <= windowHeight + 200) {
+              let translateY = 0;
+
+              // Diferentes efeitos para diferentes tipos de elementos
+              if (element.classList.contains("parallax-header")) {
+                // Header move mais devagar que o scroll
+                translateY = scrollY * -0.2;
+              } else if (element.classList.contains("parallax-card")) {
+                // Cards com movimento baseado na posição relativa
+                const cardIndex = Array.from(
+                  document.querySelectorAll(".parallax-card")
+                ).indexOf(element);
+                const elementCenter = elementTop + elementHeight / 2;
+                const viewportCenter = windowHeight / 2;
+                const distanceFromCenter =
+                  (viewportCenter - elementCenter) / windowHeight;
+
+                translateY = distanceFromCenter * 20 + cardIndex * 5;
+              } else if (element.classList.contains("parallax-section")) {
+                // Seções com movimento sutil
+                const elementCenter = elementTop + elementHeight / 2;
+                const viewportCenter = windowHeight / 2;
+                const distanceFromCenter =
+                  (viewportCenter - elementCenter) / windowHeight;
+
+                translateY = distanceFromCenter * 15;
+              }
+
+              // Aplicar transform com limite para evitar movimentos excessivos
+              const limitedTranslateY = Math.max(
+                -100,
+                Math.min(100, translateY)
+              );
+              element.style.transform = `translateY(${limitedTranslateY}px)`;
+            }
+          });
+
+          this.ticking = false;
+        }
+
+        checkVisibleElements() {
+          // Verificar elementos que já estão visíveis no carregamento
+          this.animateElements.forEach((element) => {
+            const rect = element.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.8 && rect.bottom > 0) {
+              const style = element.getAttribute("style");
+              const delayMatch =
+                style && style.match(/animation-delay:\s*([0-9.]+)s/);
+              const delay = delayMatch ? parseFloat(delayMatch[1]) * 1000 : 0;
+
+              setTimeout(() => {
+                element.classList.add("visible");
+              }, delay);
+            }
+          });
+        }
+      }
+
+      // Aplicar efeito parallax ao pseudo-elemento do body via CSS custom properties
+      const style = document.createElement("style");
+      style.textContent = `
+            body::before {
+                transform: translateY(var(--bg-transform, 0px));
+            }
+        `;
+      document.head.appendChild(style);
+
+      // Inicializar parallax quando a página carregar
+      document.addEventListener("DOMContentLoaded", () => {
+        new ParallaxController();
+      });
+
+      // Se a página já estiver carregada
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          new ParallaxController();
+        });
+      } else {
+        new ParallaxController();
+      }
+    </script>
+  </body>
+</html>

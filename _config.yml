@@ -1,0 +1,40 @@
+# Configurações do GitHub Pages
+
+# Jekyll está desabilitado (usando HTML estático)
+include:
+  - index.html
+  - README.md
+  - "*.html"
+  - "*.css"
+  - "*.js"
+  - "*.png"
+  - "*.jpg"
+  - "*.jpeg"
+  - "*.gif"
+  - "*.svg"
+  - "*.ico"
+
+# Exclusões (arquivos que não devem ser publicados)
+exclude:
+  - deploy.sh
+  - .deployignore
+  - .gitignore
+  - "*.log"
+  - "*.tmp"
+
+# Configurações de encoding
+encoding: utf-8
+
+# Configurações de build
+safe: true
+incremental: false
+highlighter: none
+gist:
+  noscript: false
+
+# Configurações do servidor de desenvolvimento local (se usar Jekyll)
+host: 0.0.0.0
+port: 4000
+
+# Timezone
+timezone: America/Sao_Paulo

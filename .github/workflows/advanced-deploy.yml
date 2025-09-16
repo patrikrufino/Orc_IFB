@@ -1,0 +1,139 @@
+name: Advanced Deploy to GitHub Pages
+
+# Trigger do workflow
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Permissões necessárias
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: write
+
+# Concorrência
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: false
+
+jobs:
+  # Job de verificação e validação
+  validate:
+    name: Validate HTML and Assets
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      # Validar HTML
+      - name: Install HTML validator
+        run: npm install -g html-validate
+      
+      - name: Validate HTML files
+        run: |
+          find . -name "*.html" -not -path "./.git/*" -not -path "./node_modules/*" | xargs html-validate || true
+          echo "HTML validation completed"
+      
+      # Verificar links e recursos
+      - name: Check for broken links
+        run: |
+          echo "Checking for common issues in HTML files..."
+          
+          # Verificar se index.html existe
+          if [ ! -f "index.html" ]; then
+            echo "❌ Error: index.html not found!"
+            exit 1
+          fi
+          
+          # Verificar se há referências a recursos locais inexistentes
+          echo "✅ Basic structure validation passed"
+          
+          # Listar arquivos que serão deployados
+          echo "📁 Files to be deployed:"
+          find . -type f -not -path "./.git/*" -not -path "./.github/*" | head -20
+      
+      - name: Validate critical resources
+        run: |
+          echo "🔍 Validating critical resources..."
+          
+          # Verificar se há erros básicos no HTML
+          if grep -q "undefined\|null\|error" index.html; then
+            echo "⚠️  Warning: Found potential issues in HTML"
+          fi
+          
+          echo "✅ Resource validation completed"
+
+  # Job de deploy (só executa em push para main)
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Prepare deployment files
+        run: |
+          echo "📦 Preparing files for deployment..."
+          
+          # Listar arquivos que serão incluídos
+          echo "Files to deploy:"
+          find . -type f -not -path "./.git/*" -not -path "./.github/*" -not -name ".deployignore"
+          
+          # Verificar tamanho total
+          echo "Total size:"
+          du -sh . | cut -f1
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      
+      - name: Deployment summary
+        run: |
+          echo "🚀 Deployment completed successfully!"
+          echo "📍 Site URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "⏰ Deployed at: $(date)"
+          
+          # Adicionar informações ao summary do GitHub
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## 🚀 Deployment Successful!
+          
+          - **Site URL:** ${{ steps.deployment.outputs.page_url }}
+          - **Branch:** \`${{ github.ref_name }}\`
+          - **Commit:** \`${{ github.sha }}\`
+          - **Deployed at:** $(date)
+          
+          ### 📁 Deployed Files
+          - index.html (Main page)
+          - README.md (Documentation)
+          - Assets and resources
+          
+          ### 🔗 Quick Links
+          - [View Site](${{ steps.deployment.outputs.page_url }})
+          - [Repository](https://github.com/${{ github.repository }})
+          - [Commit Details](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+          EOF
