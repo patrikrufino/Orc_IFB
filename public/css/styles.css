@@ -1,0 +1,184 @@
+/* Estilos Globais */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+
+body {
+    font-family: "Inter", sans-serif;
+    background-color: #0d1b2a;
+    position: relative;
+    /* Essencial para o z-index do pseudo-elemento */
+    overflow-x: hidden;
+    /* Previne scroll horizontal durante parallax */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    /* Chave para o efeito Parallax */
+    top: -20%;
+    /* Permite movimento para cima */
+    left: -10%;
+    /* Permite movimento lateral */
+    right: -10%;
+    bottom: -20%;
+    /* Permite movimento para baixo */
+    z-index: -1;
+    /* Coloca o fundo atrás de todo o conteúdo */
+    will-change: transform;
+    /* Otimiza performance do parallax */
+
+    /* Imagem de fundo com overlay escuro */
+    background-image: linear-gradient(rgba(13, 27, 42, 0.95),
+            rgba(13, 27, 42, 0.98)),
+        url("https://images.unsplash.com/photo-1531315639992-8d7a874053e1?q=80&w=1974&auto=format&fit=crop");
+    background-size: 120% 120%;
+    /* Tamanho maior para permitir movimento */
+    background-position: center center;
+    transition: transform 0.1s ease-out;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #e0e1dd, #778da9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.card-hover-effect {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card-hover-effect:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+        0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.header-bg {
+    /* O fundo do body vai aparecer através daqui, criando um efeito coeso */
+    border-bottom: 1px solid rgba(119, 141, 169, 0.2);
+}
+
+.card-bg {
+    background-color: #1b263b;
+}
+
+.flag-btn {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.flag-btn:hover,
+.flag-btn.active {
+    opacity: 1;
+}
+
+/* Efeitos Parallax */
+.parallax-element {
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+.parallax-header {
+    transform: translateY(0);
+}
+
+.parallax-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.parallax-section {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animações de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+    transition-delay: var(--animation-delay, 0s);
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Delays personalizados para os cards */
+.animate-on-scroll[style*="animation-delay: 0.1s"] {
+    transition-delay: 0.1s;
+}
+
+.animate-on-scroll[style*="animation-delay: 0.2s"] {
+    transition-delay: 0.2s;
+}
+
+.animate-on-scroll[style*="animation-delay: 0.3s"] {
+    transition-delay: 0.3s;
+}
+
+.animate-on-scroll[style*="animation-delay: 0.4s"] {
+    transition-delay: 0.4s;
+}
+
+.animate-on-scroll[style*="animation-delay: 0.5s"] {
+    transition-delay: 0.5s;
+}
+
+.animate-on-scroll[style*="animation-delay: 0.6s"] {
+    transition-delay: 0.6s;
+}
+
+/* Otimizações para mobile */
+@media (max-width: 768px) {
+    .parallax-element {
+        transform: none !important;
+        /* Desabilitar parallax em mobile para performance */
+    }
+
+    body::before {
+        transform: none !important;
+        background-attachment: scroll;
+        /* Melhor performance em mobile */
+    }
+
+    .animate-on-scroll {
+        transition-duration: 0.6s;
+        /* Animações mais rápidas em mobile */
+    }
+}
+
+/* Melhoria de performance */
+.parallax-element {
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Reduzir motion para usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+    .parallax-element {
+        transform: none !important;
+    }
+
+    body::before {
+        transform: none !important;
+    }
+
+    .animate-on-scroll {
+        transition: opacity 0.3s ease-out;
+        transform: none !important;
+    }
+}

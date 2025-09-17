@@ -15,6 +15,7 @@ Este projeto está configurado para deploy automático no GitHub Pages usando Gi
 ### 🛠️ Como Fazer Deploy
 
 #### Método 1: Script Automático (Recomendado)
+
 ```bash
 # Deploy com mensagem automática
 ./deploy.sh
@@ -24,6 +25,7 @@ Este projeto está configurado para deploy automático no GitHub Pages usando Gi
 ```
 
 #### Método 2: Manual
+
 ```bash
 # Adicionar arquivos
 git add .
